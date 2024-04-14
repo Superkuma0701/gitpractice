@@ -27,7 +27,7 @@ public class GitPracticeApplication {
 
 //            findById(studentDAO);
 
-            updateStudent(studentDAO);
+//            updateStudent(studentDAO);
         };
     }
 

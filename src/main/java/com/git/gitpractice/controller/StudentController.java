@@ -1,16 +1,30 @@
 package com.git.gitpractice.controller;
 
 import com.git.gitpractice.DAO.StudentRepository;
+import com.git.gitpractice.Exception.StudentNotFoundException;
 import com.git.gitpractice.model.Student;
+import com.git.gitpractice.model.StudentPOJO;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
+
+    private List<StudentPOJO>studentPOJOList;
+
+    @PostConstruct
+    private void loadData(){
+        studentPOJOList = new ArrayList<>();
+        studentPOJOList.add(new StudentPOJO("Felix","Wei"));
+        studentPOJOList.add(new StudentPOJO("Ruru","Chen"));
+        studentPOJOList.add(new StudentPOJO("Kevin","Wu"));
+    }
 
     @PostMapping("/student")
     public String insert(@RequestBody Student student) {
@@ -47,5 +61,24 @@ public class StudentController {
     @GetMapping("/students/{studentName}")
     public List<Student> readName(@PathVariable String studentName) {
         return studentRepository.findByName(studentName);
+    }
+
+    //java POJO -> json practice
+    @GetMapping("/api/students")
+    public List<StudentPOJO> search(){
+        return studentPOJOList;
+    }
+
+    //@pathVariable and custom exception practice
+    @GetMapping("/api/student/{studentId}")
+    public StudentPOJO singleStudent(@PathVariable Integer studentId){
+        //check studentId
+        if(studentId > studentPOJOList.size() || studentId < 0){
+            //custom exception
+            //when student not found then throw exception
+            throw new StudentNotFoundException("student not found");
+        }
+
+        return studentPOJOList.get(studentId);
     }
 }
