@@ -1,12 +1,11 @@
-package com.git.gitpractice.DAO;
+package com.git.gitpractice.Service;
 
 import com.git.gitpractice.model.Employee;
 
 import java.util.List;
 
-public interface EmployeeDAO {
-
-    List<Employee> findAll();
+public interface EmployeeService {
+    List<Employee>findAll();
 
     Employee findById(Integer employeeId);
 
